@@ -1,35 +1,9 @@
-import hashlib
-import os
-import chardet
+import json
 import tiktoken
 import anthropic
+import yaml
 
 from vertexai.preview import tokenization
-
-def calculate_file_hash(filepath):
-    hash_md5 = hashlib.md5()
-    with open(filepath, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hash_md5.update(chunk)
-        return hash_md5.hexdigest()
-
-
-def list_files(path, include_ignore_file=False, add_path=False, extension=None):
-    filenames = os.listdir(path)
-    if not include_ignore_file:
-        filenames = [f for f in filenames if not f.startswith('.')]
-    if extension is not None:
-        filenames = [f for f in filenames if f.endswith(extension)]
-    if add_path:
-        filenames = [os.path.join(path, f) for f in filenames]
-    return filenames
-
-
-def detect_encoding(filepath):
-    with open(filepath, 'rb') as f:
-        raw_data = f.read()
-        enc = chardet.detect(raw_data)
-        return enc['encoding']
 
 
 def count_tokens(text, model):
@@ -45,3 +19,35 @@ def count_tokens(text, model):
         tokenizer = tokenization.get_tokenizer_for_model(model_name)
         result = tokenizer.count_tokens(text)
         return result.total_tokens
+
+
+def yml_to_dict(filepath):
+    """
+    Read yaml file
+
+    Args:
+        filepath: The file path
+
+    Returns: Dict of the yaml file content
+
+    """
+    with open(filepath, "r", encoding="utf-8") as f:
+        prompts = yaml.safe_load(f.read())
+
+    return prompts
+
+
+def json_to_dict(filepath):
+    """
+    Read json file
+
+    Args:
+        filepath: The file path
+
+    Returns: Dict of the json file content
+
+    """
+    with open(filepath, "r", encoding="utf-8") as f:
+        prompts = json.loads(f.read())
+
+    return prompts

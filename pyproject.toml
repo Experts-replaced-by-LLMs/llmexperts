@@ -3,7 +3,112 @@
 requires = ["setuptools>=46.1.0", "setuptools_scm[toml]>=5"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "llmexperts"
+description = "Python package for processing political texts for summarsiation and scaling of the texts as political experts would otherwise do."
+version = "0.0.1"
+authors = [
+    { name = "Jinshuai Ma", email = "j.ma23@lse.ac.uk" },
+    { name = "Conor Laver", email = "conorlaver@gmail.com" },
+    { name = "Kenneth Benoit", email = "kbenoit@lse.ac.uk" }
+]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python"
+]
+keywords = ["llm", "data-science"]
+
+dependencies=[
+    "langchain>=0.1.11",
+    "langchain-anthropic>=0.1.15",
+    "langchain-openai>=0.1.8",
+    "langchain-google-genai>=1.0.7",
+    "pandas>=2.0",
+    "jupyterlab>=4.1",
+    "ipywidgets>=8.1",
+    "openpyxl>=3.1",
+    "python-dotenv>=1.0.1",
+    "seaborn>=0.13",
+    "google-cloud-translate>=3.15.5",
+    "google-cloud-storage>=2.18.1",
+    "langchain-google-community>=1.0.7",
+    "langchain-ollama>=0.1.1",
+    "importlib-metadata;python_version < '3.8'",
+    "vertexai",
+    "sentencepiece"
+]
+
+[dependency-groups]
+testing=["setuptools", "pytest", "pytest-cov"]
+
 [tool.setuptools_scm]
 # For smarter version schemes and other configuration options,
 # check out https://github.com/pypa/setuptools_scm
 version_scheme = "no-guess-dev"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+pythonpath = ["."]
+
+[tool.tox]
+min_version = "3.24"
+envlist = ["clean", "docs", "default", "build"]
+
+[tool.tox.env_run_base]
+base_python = ["3.12"]
+description = "Invoke pytest to run automated tests"
+setenv = { TOXINIDIR = "{toxinidir}" }
+passenv = ["HOME", "SETUPTOOLS_*"]
+deps = ["pytest", "python-dotenv"]
+commands = [["pytest"]]
+
+#[tool.tox.env.py313]
+#base_python = ["3.13"]
+#description = "Invoke pytest to run automated tests on Python 3.13"
+#setenv = { TOXINIDIR = "{toxinidir}" }
+#passenv = ["HOME", "SETUPTOOLS_*"]
+#deps = ["pytest", "python-dotenv"]
+#commands = [["pytest"]]
+
+[tool.tox.env.build]
+description = "Build the package in isolation according to PEP517, see https://github.com/pypa/build"
+skip_install = true
+changedir = "{toxinidir}"
+deps = ["build[virtualenv]"]
+passenv = ["SETUPTOOLS_*"]
+commands = [["python", "-m", "build"]]
+
+[tool.tox.env.clean]
+description = "Remove old distribution files and temporary build artifacts (./build and ./dist)"
+skip_install = true
+changedir = "{toxinidir}"
+commands = [
+    ["python", "-c", "import shutil; [shutil.rmtree(p, True) for p in ('build', 'dist', 'docs/_build', 'docs/api')]"],
+    ["python", "-c", "'import pathlib, shutil; [shutil.rmtree(p, True) for p in pathlib.Path(\"src\").glob(\"*.egg-info\")]'"]
+]
+
+[tool.tox.env.docs]
+description = "Invoke sphinx-build to build the docs"
+passenv = ["SETUPTOOLS_*"]
+setenv = { DOCSDIR = "{toxinidir}/docs", BUILDDIR = "{toxinidir}/docs/_build", BUILD = "html"}
+deps = ["-r {toxinidir}/docs/requirements.txt"]
+change_dir = "{env:DOCSDIR}"
+commands = [["sphinx-build", "--color", "-b", "{env:BUILD}", "{env:DOCSDIR}", "{env:BUILDDIR}"]]
+
+[tool.tox.env.doctests]
+description = "Invoke sphinx-build to run doctests"
+passenv = ["SETUPTOOLS_*"]
+setenv = { DOCSDIR = "{toxinidir}/docs", BUILDDIR = "{toxinidir}/docs/_build", BUILD = "doctest" }
+deps = ["-r {toxinidir}/docs/requirements.txt"]
+commands = [["sphinx-build", "--color", "-b", "{env:BUILD}", "{env:DOCSDIR}", "{env:BUILDDIR}"]]
+
+[tool.tox.env.linkcheck]
+description = "Check for broken links in the documentation"
+passenv = ["SETUPTOOLS_*"]
+setenv = { DOCSDIR = "{toxinidir}/docs", BUILDDIR = "{toxinidir}/docs/_build", BUILD = "linkcheck" }
+deps = ["-r {toxinidir}/docs/requirements.txt"]
+change_dir = "{env:DOCSDIR}"
+commands = [["sphinx-build", "--color", "-b", "{env:BUILD}", "{env:DOCSDIR}", "{env:BUILDDIR}"]]

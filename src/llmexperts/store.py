@@ -16,6 +16,7 @@ def store_results(results_df, db_path='../data/results/manifesto_analysis_result
 
     Returns:
         None
+
     """
     conn = sqlite3.connect(db_path)
     results_df['datetime_utc_added'] = datetime.now(timezone.utc)
@@ -32,6 +33,7 @@ def get_results(db_path='../data/results/manifesto_analysis_results.db', table_n
 
     Returns:
         pd.DataFrame: The DataFrame containing the results of the analysis.
+
     """
     conn = sqlite3.connect(db_path)
     results_df = pd.read_sql(f'SELECT * FROM {table_name}', conn)

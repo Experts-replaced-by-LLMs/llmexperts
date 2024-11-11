@@ -1,0 +1,25 @@
+personas:
+  - PERSONA_1
+  - PERSONA_2
+  - PERSONA_3
+
+encouragements:
+  - ENCOURAGEMENT_1
+  - ENCOURAGEMENT_2
+  - ENCOURAGEMENT_3
+
+policy_scales:
+  issue_1: |
+    ISSUE_1 DEFINITION
+  issue_2: |
+    ISSUE_2 DEFINITION
+
+system_template_string: |
+  {persona} {encouragement}
+
+  {policy_scale}
+
+human_template_string: |
+  Analyze the following political text:
+
+  {text}
