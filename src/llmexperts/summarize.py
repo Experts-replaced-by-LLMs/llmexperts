@@ -198,7 +198,7 @@ def summarize_file(
             )
         except Exception as e:
             if chunk_size > 0:
-                print("Cannot summarize entire document. Trying chunk summarization...")
+                print(f"Model {model} cannot summarize entire document. Trying chunk summarization...")
                 summary = summarize_text(
                     text, prompt_template, model, issues_to_summarize,
                     chunk_size=chunk_size, overlap=overlap, max_tokens_factor=max_tokens_factor,
@@ -230,36 +230,3 @@ def summarize_file(
             file.write(summary.final_summary)
 
     return summary.final_summary
-
-
-if __name__ == '__main__':
-    import os
-    import dotenv
-
-    dotenv.load_dotenv()
-
-    # Summary
-    folder = "/Users/j.ma23/Workspace/GitHub/Experts-replaced-by-LLMs/Replication/data/texts/parties"
-    filenames = [
-        "Austria - AU 2006 - AU 2006 FPO.txt",
-        "Belgium - BEL 2010 - BEL 2010 Green Ecolo.txt",
-        "Bulgaria - BUL 2014 Attack.txt",
-        "Czech - CZ 2010 - CZ 2010 Communist.txt",
-        "Finland - FIN 2019 - FIN 2019 Nat Coal.txt",
-        "Netherlands - NL 2006 - NL 2006 VVD.txt",
-        "Slovakia - SLO 2006 - SLO 2006 Direction.txt",
-        "UK - UK 2019 Green.txt",
-    ]
-    issues_to_summarize_ = ["european_union", "taxation", "lifestyle", "immigration", "environment", "decentralization"]
-    model_ = "gpt-4o-2024-08-06"
-    prompt_path_ = "/Users/j.ma23/Workspace/GitHub/Experts-replaced-by-LLMs/llmexperts/tests/prompts-summarize__no_na.yaml"
-    output_dir_ = "/Users/j.ma23/Workspace/data/llme/llmexperts/integrated_test"
-    for filename in filenames:
-        filepath = os.path.join(folder, filename)
-        for issue in issues_to_summarize_:
-            print("----------")
-            print(issue)
-            summarize_file(
-                filepath, prompt_path_, [issue],
-                output_dir_, model_, save_log=True, dry_run=True
-            )

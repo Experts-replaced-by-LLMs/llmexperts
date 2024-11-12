@@ -1,0 +1,15 @@
+issue_areas:
+  taxation: |
+    Taxation, spending on public services, and tradeoffs between these.
+
+system_template_string: |
+  You are an expert political analyst. Please summarize what the following political manifesto has to say about
+
+  {issue_areas}
+
+  You should detect the original language and output a concise summary in English of about 300 - 400 words, dealing only with the manifesto's discussion of this issue.
+
+human_template_string: |
+  Please summarize the following text:
+  
+  {text}

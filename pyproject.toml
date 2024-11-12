@@ -52,6 +52,9 @@ addopts = [
     "--import-mode=importlib",
 ]
 pythonpath = ["."]
+markers = [
+    "api: marks tests that will invoke LLM API call. (deselect with '-m \"not api\"')"
+]
 
 [tool.tox]
 min_version = "3.24"

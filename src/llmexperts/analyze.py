@@ -111,6 +111,44 @@ def analyze_text_with_batch(
     return response_dicts
 
 
+def ensure_output_paths(
+        output_dir=None,
+        results_filepath=None,
+        results_filename="analyze_results.csv",
+        logs_filepath=None,
+        logs_filename="analyze_logs.csv"
+):
+    if results_filepath is None:
+        if not results_filename.endswith('.csv'):
+            raise ValueError(f'results_filename must end with .csv')
+        if output_dir is None:
+            raise ValueError('Either output_dir or result_filepath must be provided')
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        results_filepath = os.path.join(output_dir, results_filename)
+    else:
+        if not results_filepath.endswith('.csv'):
+            raise ValueError('results_filepath must end with .csv')
+        if not os.path.exists(os.path.dirname(results_filepath)):
+            os.makedirs(os.path.dirname(results_filepath))
+
+    if logs_filepath is None:
+        if not logs_filename.endswith('.csv'):
+            raise ValueError('logs_filename must end with .csv')
+        if output_dir is None:
+            logs_filepath = os.path.join(os.path.dirname(results_filepath), logs_filename)
+        else:
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            logs_filepath = os.path.join(output_dir, logs_filename)
+    else:
+        if not logs_filepath.endswith('.csv'):
+            raise ValueError('logs_filepath must end with .csv')
+        if not os.path.exists(os.path.dirname(logs_filepath)):
+            os.makedirs(os.path.dirname(logs_filepath))
+    return results_filepath, logs_filepath
+
+
 def analyze_file(
         filepath, model_list, issue_list, prompt_template: AnalyzePromptTemplate | os.PathLike, output_dir=None,
         parse_retries=3, max_retries=7, concurrency=3, probabilities=False,
@@ -153,21 +191,11 @@ def analyze_file(
     if not meta_columns:
         meta_columns = {}
 
-    if results_filepath is None:
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        results_filepath = os.path.join(output_dir, results_filename)
-    else:
-        if not os.path.exists(os.path.dirname(results_filepath)):
-            os.makedirs(os.path.dirname(results_filepath))
-
-    if logs_filepath is None:
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        logs_filepath = os.path.join(output_dir, logs_filename)
-    else:
-        if not os.path.exists(os.path.dirname(logs_filepath)):
-            os.makedirs(os.path.dirname(logs_filepath))
+    results_filepath, logs_filepath = ensure_output_paths(
+        output_dir=output_dir,
+        results_filepath=results_filepath, results_filename=results_filename,
+        logs_filepath=logs_filepath, logs_filename=logs_filename
+    )
 
     summary_filename = os.path.basename(filepath)
 

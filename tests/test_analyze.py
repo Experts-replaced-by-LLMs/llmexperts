@@ -1,12 +1,26 @@
 import os
-
+import pytest
 import pandas as pd
 from dotenv import load_dotenv
 
-from src.llmexperts.analyze import analyze_file
-
+from src.llmexperts.analyze import analyze_file, ensure_output_paths
 
 load_dotenv()
+
+
+def test_ensure_output_paths(output_folder):
+
+    results_filepath = os.path.join(output_folder, "./output/results.csv")
+    logs_filepath = os.path.join(output_folder, "./log/results.csv")
+    ensure_output_paths(
+        results_filepath=results_filepath,
+        logs_filepath=logs_filepath
+    )
+    assert os.path.exists(os.path.dirname(results_filepath))
+    assert os.path.exists(os.path.dirname(logs_filepath))
+
+    with pytest.raises(ValueError):
+        ensure_output_paths(results_filepath="./output/results")
 
 
 def test_analyze_file(output_folder, summary_file_folder):
@@ -53,7 +67,7 @@ def test_analyze_file(output_folder, summary_file_folder):
     assert df.shape[0] == len(filenames)*len(model_list)*9*len(issue_list)
 
 
-def test_analyze_file_1(output_folder, summary_file_folder):
+def test_analyze_file_use_examples(output_folder, summary_file_folder):
     model_list = ["gpt-4o-2024-08-06", "claude-3-5-sonnet-20241022", "gemini-1.5-pro-002"]
     issue_list = ["issue_1", "issue_2"]
     prompt_template = os.path.join(os.path.dirname(__file__), "prompts-analyze.yaml")

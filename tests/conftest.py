@@ -1,15 +1,16 @@
 import os
 import shutil
+import time
 
 import pytest
 
 @pytest.fixture(scope='function')
 def output_folder():
-    path = "./test_output"
+    path = f"./test_output_{int(time.time())}"
     if not os.path.exists(path):
         os.mkdir(path)
     yield path
-    # shutil.rmtree(path)
+    shutil.rmtree(path)
 
 @pytest.fixture(scope='function')
 def text_file_folder():
@@ -18,37 +19,9 @@ def text_file_folder():
         os.mkdir(path)
     for i in range(2):
         with open(os.path.join(path, "text_" + str(i) + ".txt"), "w", encoding="utf-8") as f:
-
             f.write(f"TEXT {i}")
     yield path
-    # shutil.rmtree(path)
-
-
-@pytest.fixture(scope='function')
-def short_text_file_folder():
-    path = "./test_texts_long"
-    if not os.path.exists(path):
-        os.mkdir(path)
-    with open(os.path.join(path, "text_1.txt"), "w", encoding="utf-8") as f:
-        f.write(" ".join(["TEXT"]*100))
-    with open(os.path.join(path, "text_2.txt"), "w", encoding="utf-8") as f:
-        f.write(" ".join(["TEXT"]*1_000))
-    yield path
-    # shutil.rmtree(path)
-
-
-@pytest.fixture(scope='function')
-def long_text_file_folder():
-    path = "./test_texts_long"
-    if not os.path.exists(path):
-        os.mkdir(path)
-    with open(os.path.join(path, "text_1.txt"), "w", encoding="utf-8") as f:
-        f.write(" ".join(["TEXT"]*100_000))
-    with open(os.path.join(path, "text_2.txt"), "w", encoding="utf-8") as f:
-        f.write(" ".join(["TEXT"]*250_000))
-    yield path
-    # shutil.rmtree(path)
-
+    shutil.rmtree(path)
 
 @pytest.fixture(scope='function')
 def summary_file_folder():
@@ -67,4 +40,3 @@ def summary_file_folder():
                     f.write(f"SUMMARY OF {path}")
     yield path
     shutil.rmtree(path)
-
