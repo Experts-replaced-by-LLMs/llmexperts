@@ -11,13 +11,10 @@ load_dotenv()
 def test_ensure_output_paths(output_folder):
 
     results_filepath = os.path.join(output_folder, "./output/results.csv")
-    logs_filepath = os.path.join(output_folder, "./log/results.csv")
     ensure_output_paths(
         results_filepath=results_filepath,
-        logs_filepath=logs_filepath
     )
     assert os.path.exists(os.path.dirname(results_filepath))
-    assert os.path.exists(os.path.dirname(logs_filepath))
 
     with pytest.raises(ValueError):
         ensure_output_paths(results_filepath="./output/results")
@@ -44,7 +41,7 @@ def test_analyze_file(output_folder, summary_file_folder):
         override_personas=None, override_encouragements=None,
         parse_retries = 3, max_retries = 7, concurrency = 3, probabilities = False,
         results_filepath = None, results_filename = "analyze_results.csv",
-        save_log = True, logs_filepath = None, logs_filename = "analyze_logs.csv",
+        save_log = True,
         meta_columns = None, skip_existing_analyze_results = True,
         dry_run=True
     )
@@ -80,7 +77,7 @@ def test_analyze_file_use_examples(output_folder, summary_file_folder):
         override_personas=0, override_encouragements=1,
         parse_retries = 3, max_retries = 7, concurrency = 3, probabilities = False,
         results_filepath = None, results_filename = "analyze_results.csv",
-        save_log = True, logs_filepath = None, logs_filename = "analyze_logs.csv",
+        save_log = True,
         meta_columns = None, skip_existing_analyze_results = True,
         dry_run=True
     )

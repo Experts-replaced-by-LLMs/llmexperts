@@ -89,7 +89,7 @@ class SummarizePromptTemplate(LLMExpertPromptTemplate):
             )
         ]
 
-AnalyzedPrompt = namedtuple("AnalyzedPrompt", ["prompt", "persona", "encouragement"])
+AnalyzedPrompt = namedtuple("AnalyzedPrompt", ["prompt", "persona", "encouragement", "persona_idx", "encouragement_idx"])
 
 class AnalyzePromptTemplate(LLMExpertPromptTemplate):
 
@@ -170,6 +170,7 @@ class AnalyzePromptTemplate(LLMExpertPromptTemplate):
                         )),
                         *example_messages,
                         HumanMessage(content=self.human_template.format(text=text))
-                    ], persona=persona_text, encouragement=encouragement_text
+                    ], persona=persona_text, encouragement=encouragement_text,
+                    persona_idx=persona_idx, encouragement_idx=encouragement_idx
                 ))
         return prompts
