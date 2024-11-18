@@ -20,6 +20,18 @@ system_template_string: |
   {policy_scale}
 
 human_template_string: |
-  Analyze the following political text:
+  Scale the following political text:
 
   {text}
+
+examples:
+  issue_1:
+  - score: 1
+    summary: "ISSUE 1 EXAMPLE 1"
+  - score: 7
+    summary: 'ISSUE 1 EXAMPLE 2'
+  issue_2:
+    - score: 2
+      summary: "ISSUE 2 EXAMPLE 1"
+    - score: 3
+      summary: 'ISSUE 2 EXAMPLE 2'

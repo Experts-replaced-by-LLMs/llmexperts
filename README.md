@@ -141,28 +141,38 @@ for issue in issues_to_summarize:
     )
 ```
 
-## Scoring
+## Scale
 
 ```python
-from llmexperts.analyze import analyze_file
+from llmexperts.scale import scale_file
 
 filepath = "./texts/manifesto_text.txt"
-prompt_template = "./prompts-analyze.yaml"
+prompt_template = "./prompts-scale.yaml"
 output_dir = "./output"
 log_dir = "./logs"
 
 model_list = ["gpt-4o-2024-08-06", "claude-3-5-sonnet-20241022", "gemini-1.5-pro-002"]
 issue_list = ["issue_1", "issue_2"]
 
-analyze_file(
+scale_file(
     filepath, model_list, issue_list, prompt_template, output_dir,
-    use_examples=True ,save_log=True, logs_filepath=log_dir
+    use_examples=True, save_log=True
 )
 ```
 
 For more details, please see documentation.
 
-## Test
+## Develop
+
+This section describes how to run tests, build package and build documentation.
+
+### Prerequisites
+
+[**tox**](https://tox.wiki/en/latest/installation.html)
+
+[**Sphinx**](https://www.sphinx-doc.org/en/master/usage/installation.html)
+
+### Tests
 
 To run the tests, make sure the LLM's API key are properly set as environment variables.
 
@@ -177,5 +187,17 @@ Alternatively, put the variables in a .env file in the /tests folder, which will
 Run the tests:
 
 ```bash
-$ tox run -e test
+$ tox run -e default
+```
+
+### Build Documentation
+
+```bash
+$ tox run -e docs
+```
+
+### Build package
+
+```bash
+$ tox run -e build
 ```

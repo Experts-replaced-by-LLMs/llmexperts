@@ -89,9 +89,9 @@ class SummarizePromptTemplate(LLMExpertPromptTemplate):
             )
         ]
 
-AnalyzedPrompt = namedtuple("AnalyzedPrompt", ["prompt", "persona", "encouragement", "persona_idx", "encouragement_idx"])
+ScalePrompt = namedtuple("ScalePrompt", ["prompt", "persona", "encouragement", "persona_idx", "encouragement_idx"])
 
-class AnalyzePromptTemplate(LLMExpertPromptTemplate):
+class ScalePromptTemplate(LLMExpertPromptTemplate):
 
     def __init__(
             self, system_template_string: str, human_template_string: str,
@@ -119,16 +119,16 @@ class AnalyzePromptTemplate(LLMExpertPromptTemplate):
         self.ai_template = PromptTemplate(template=ai_template_string)
 
     def build_prompt(
-            self, text: str, issue_to_analyze: str, use_examples:bool=False,
+            self, text: str, issue_to_scale: str, use_examples:bool=False,
             override_persona_to_use: int | list[int]=None, override_encouragement_to_use: int | list[int]=None
-    ) -> list[AnalyzedPrompt]:
+    ) -> list[ScalePrompt]:
 
         """
         Build a scoring prompt.
 
         Args:
             text (str): The text to be scored.
-            issue_to_analyze (str): The issue name to be scored.
+            issue_to_scale (str): The issue name to be scored.
             use_examples (boolean): Whether to add examples as few-shot scoring.
             override_persona_to_use (int|list[int]): The persona to use. The index of personas in the template. If None, use all.
             override_encouragement_to_use: (int|list[int]): The encouragement to use. The index of encouragements in the template. If None, use all.
@@ -151,7 +151,7 @@ class AnalyzePromptTemplate(LLMExpertPromptTemplate):
 
         example_messages = []
         if use_examples:
-            for issue_examples in self.examples.get(issue_to_analyze, []):
+            for issue_examples in self.examples.get(issue_to_scale, []):
                 summary = issue_examples["summary"]
                 score = issue_examples["score"]
                 example_messages.append(HumanMessage(content=self.human_template.format(text=summary)))
@@ -162,11 +162,11 @@ class AnalyzePromptTemplate(LLMExpertPromptTemplate):
             persona_text = self.personas[persona_idx]
             for encouragement_idx in override_encouragement_to_use:
                 encouragement_text = self.encouragements[encouragement_idx]
-                prompts.append(AnalyzedPrompt(
+                prompts.append(ScalePrompt(
                     prompt=[
                         SystemMessage(content=self.system_template.format(
                             persona=persona_text, encouragement=encouragement_text,
-                            policy_scale=self.policy_scales[issue_to_analyze]
+                            policy_scale=self.policy_scales[issue_to_scale]
                         )),
                         *example_messages,
                         HumanMessage(content=self.human_template.format(text=text))
