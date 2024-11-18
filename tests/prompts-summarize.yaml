@@ -1,0 +1,9 @@
+issue_areas:
+  issue_1: |
+    ISSUE_1 DEFINITION
+  issue_2: |
+    ISSUE_2 DEFINITION
+system_template_string: |
+  SUMMARY {issue_areas} IN {min_size} - {max_size} words.
+human_template_string: |
+  Summarize: {text}

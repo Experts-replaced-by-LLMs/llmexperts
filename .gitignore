@@ -135,3 +135,4 @@ cython_debug/
 llmexperts.Rproj
 .DS_Store
 
+.idea
