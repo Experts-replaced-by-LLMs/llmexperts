@@ -24,7 +24,7 @@ finally:
 # - Gemini models: ['gemini-1.5-pro-001']
 
 openai_model_list = [
-    'gpt-3.5-turbo', 'gpt-4', 'gpt-4o-2024-08-06'
+    'gpt-3.5-turbo', 'gpt-4', 'gpt-4o-2024-11-20'
 ]
 claude_model_list = [
     "claude-3-5-sonnet-20241022", 'claude-3-5-sonnet-20240620',
