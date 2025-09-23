@@ -8,6 +8,7 @@ from langchain_core.load import dumpd
 
 from .model import LLMClient
 from .prompts import SummarizePromptTemplate
+from .utils import escape_model_name
 
 
 class Summary:
@@ -119,11 +120,12 @@ def make_summary_name(max_size, model_name, issue_areas, file_path):
     else:
         length = 'long'
     # formatted_model_name = re.sub(r'[-_.:]', '', model_name)
+    formatted_model_name = escape_model_name(model_name)
     if len(issue_areas) > 1:
         issue_name = "multi"
     else:
         issue_name = issue_areas[0]
-    return f"summary_{length}__{model_name}__{issue_name}__{input_filename}"
+    return f"summary_{length}__{formatted_model_name}__{issue_name}__{input_filename}"
 
 
 def summarize_file(
@@ -222,8 +224,9 @@ def summarize_file(
             log_file_name = os.path.join(
                 output_dir, f"log_{summary_name}.json"
             )
-        with open(log_file_name, 'w', encoding="utf-8") as f:
+        with open(log_file_name, 'a', encoding="utf-8") as f:
             f.write(summary.dump())
+            f.write('\n')
     if save_summary:
         print(f"Saving summary to {summary_file_name}")
         with open(summary_file_name, "w", encoding="utf-8") as file:

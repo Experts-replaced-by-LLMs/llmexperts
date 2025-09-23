@@ -1,3 +1,4 @@
+import os
 import time
 from functools import reduce
 
@@ -8,7 +9,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage, SystemMessage, BaseMessage
 
-from . import openai_model_list, claude_model_list, gemini_model_list, per_minute_token_limit
+from . import openai_model_list, claude_model_list, gemini_model_list, per_minute_token_limit, open_model_list
 
 
 class LLMClient:
@@ -34,6 +35,12 @@ class LLMClient:
             self.llm = ChatAnthropic(temperature=temperature, max_tokens=max_tokens, model_name=model, max_retries=max_retries)
         elif model in gemini_model_list:
             self.llm = ChatGoogleGenerativeAI(temperature=temperature, max_tokens=max_tokens, model=model, max_retries=max_retries)
+        elif model in open_model_list:
+            self.llm = ChatOpenAI(
+                openai_api_base="https://api.studio.nebius.com/v1/",
+                openai_api_key=os.environ.get("NEBIUS_API_KEY"),
+                temperature=temperature, max_tokens=max_tokens, model_name=model, max_retries=max_retries
+            )
         else:
             raise Exception(
                 f"You've selected a model that is not available {model}.\nPlease select from the following models: {openai_model_list + claude_model_list + gemini_model_list}"

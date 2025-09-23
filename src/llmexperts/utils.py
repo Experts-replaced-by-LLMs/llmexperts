@@ -51,3 +51,10 @@ def json_to_dict(filepath):
         prompts = json.loads(f.read())
 
     return prompts
+
+
+def escape_model_name(name):
+    return name.replace("/", "+")
+
+def unescape_model_name(name):
+    return name.replace("+", "/")

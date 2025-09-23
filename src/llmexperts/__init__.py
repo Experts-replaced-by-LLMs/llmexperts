@@ -36,11 +36,29 @@ gemini_model_list = [
     'gemini-1.5-pro-001',
     'gemini-1.5-pro-002'
 ]
+open_model_list = [
+    "deepseek-ai/DeepSeek-V3-0324",
+    "meta-llama/Llama-3.3-70B-Instruct",
+    "Qwen/Qwen2.5-72B-Instruct",
+    "google/gemma-3-27b-it",
+    "deepseek-ai/DeepSeek-V3-0324-fast",
+    "meta-llama/Llama-3.3-70B-Instruct-fast",
+    "Qwen/Qwen2.5-72B-Instruct-fast",
+    "google/gemma-3-27b-it-fast",
+]
 
 per_minute_token_limit = {
     "claude-3-5-sonnet-20240620": 400000,
     "claude-3-opus-20240229": 80000,
     "claude-3-sonnet-20240229": 160000,
     "claude-3-haiku-20240307": 200000,
-    "gpt-4o": 800000
+    "gpt-4o": 800000,
+    "deepseek-ai/DeepSeek-V3-0324":1000000,
+    "meta-llama/Llama-3.3-70B-Instruct":3000000,
+    "Qwen/Qwen2.5-72B-Instruct":400000,
+    "google/gemma-3-27b-it":400000,
+    "deepseek-ai/DeepSeek-V3-0324-fast":1000000,
+    "meta-llama/Llama-3.3-70B-Instruct-fast":3000000,
+    "Qwen/Qwen2.5-72B-Instruct-fast":400000,
+    "google/gemma-3-27b-it-fast":400000,
 }
