@@ -254,7 +254,10 @@ def scale_file(
                 results_df['file'] = summary_filename
                 results_df['created_at'] = datetime.now()
                 for k, v in meta_columns.items():
-                    results_df[k] = results_df[k] = v
+                    if results_df.shape[0] > 1:
+                        results_df[k] = [v]*results_df.shape[0]
+                    else:
+                        results_df[k] = v
 
                 use_columns = [
                     'file', 'issue', 'scale_model', 'score', 'created_at',
